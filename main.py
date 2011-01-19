@@ -61,6 +61,10 @@ class ArtistHandler(webapp.RequestHandler):
         
         logging.info(json.dumps(lastfm_response, sort_keys=True, indent=4))
         
+        #Just pick one of the available images!
+        if 'artist' in lastfm_response:
+            lastfm_response['artist']['image'] = lastfm_response['artist']['image'][3]['#text']
+        
         self.response.out.write( render_template('artist_info.html', lastfm_response) )
 
 def render_template(file, args):
