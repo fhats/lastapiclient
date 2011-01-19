@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import os
+from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 
@@ -22,9 +24,13 @@ class MainHandler(webapp.RequestHandler):
     def get(self):
         self.response.out.write('Hello world!')
 
-
+class TrackHandler(webapp.RequestHandler):
+    def get(self):
+        
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
+    application = webapp.WSGIApplication([('/', MainHandler),
+                                          ('/track/info', TrackHandler),
+                                          ('/artist/info', ArtistHandler)],
                                          debug=True)
     util.run_wsgi_app(application)
 
