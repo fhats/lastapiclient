@@ -15,8 +15,9 @@
 # limitations under the License.
 #
 import os
-from google.appengine.ext.webapp import template
+from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp import util
 
 
@@ -27,6 +28,14 @@ class MainHandler(webapp.RequestHandler):
 class TrackHandler(webapp.RequestHandler):
     def get(self):
         
+    def post(self):
+        cgi.escape(self.request.get('track')
+        
+class ArtistHandler(webapp.RequestHandler):
+    def get(self):
+    
+    def post(self):
+    
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
                                           ('/track/info', TrackHandler),
