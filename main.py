@@ -29,39 +29,27 @@ class MainHandler(webapp.RequestHandler):
     def get(self):
         self.response.out.write('Hello world!')
 
-class TrackHandler(webapp.RequestHandler):
-    def get(self):
-        self.response.out.write( render_template('track_info.html', {}) )
-        
-    def post(self):
-        track_name = cgi.escape(self.request.get('track'))
-        artist_name = cgi.escape(self.request.get('artist'))
-        
-        lastfm_args = {
-            'method': 'track.getInfo',
-            'artist': artist_name,
-            'track': track_name
-        }
-        lastfm_response = getLastFmJson(lastfm_args)
-        
-        self.response.out.write( render_template('track_info.html', lastfm_response) )
-        
+# ArtistHandler is responsible for providing an interface to the Last.FM API method artist.getInfo
+# It handles two HTTP methods: GET and POST        
 class ArtistHandler(webapp.RequestHandler):
+    # Just provide a form to interact with ArtistHandler
     def get(self):
         self.response.out.write( render_template('artist_info.html', {}) )
         
+    # Do the actual interaction with the Last.FM API based on form data
     def post(self):
+        # Parse arguments from the form
         artist_name = cgi.escape(self.request.get('artist'))
         
+        # Arguments to the Last.FM API, passed using a map
         lastfm_args = {
             'method': 'artist.getInfo',
             'artist': artist_name
         }
         lastfm_response = getLastFmJson(lastfm_args)
         
-        logging.info(json.dumps(lastfm_response, sort_keys=True, indent=4))
-        
         #Just pick one of the available images!
+        #This is a workaround for not being able to refer to variables with special letters i.e. the hash in #text
         if 'artist' in lastfm_response:
             lastfm_response['artist']['image'] = lastfm_response['artist']['image'][3]['#text']
         
@@ -73,7 +61,6 @@ def render_template(file, args):
         
 def main():
     application = webapp.WSGIApplication([('/', MainHandler),
-                                          ('/track/info', TrackHandler),
                                           ('/artist/info', ArtistHandler)],
                                          debug=True)
     util.run_wsgi_app(application)

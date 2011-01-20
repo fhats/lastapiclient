@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <title>Last.FM API Client - Artist Information</title>
+    <!--    The following stylesheets are Blueprint CSS stylesheets. 
+            They just provide some nice default formatting. 
+            I have them hosted on another project and hotlinked them here for convenience. 
+    -->
+    <link rel="stylesheet" href="http://fmqueue.appspot.com/static/css/blueprint/screen.css" type="text/css" media="screen, projection"> 
+    <link rel="stylesheet" href="http://fmqueue.appspot.com/static/css/blueprint/print.css" type="text/css" media="print">	
+    <!--[if lt IE 8]><link rel="stylesheet" href="http://fmqueue.appspot.com/static/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]--> 
+    
+    <!--    This stylesheet is part of the jQuery UI suite. It's used for a couple stock classes for formatting.
+            Once again I'm just hotlinking to it as it's hosted at another project.
+    -->
+    <link type="text/css" href="http://fmqueue.appspot.com/static/css/jquery-ui/jquery-ui-1.8.7.custom.css" rel="Stylesheet" />
+</head>
+
+<body>
+
+<div class="container">
+    
+    <div class='span-24 last'>
+        <center>
+            <form action='/artist/info' method='POST'>
+                <label for='artist'><strong>Artist:</strong></label>
+                <input name='artist' type='text' />
+                <br />
+                <input type='submit' />
+            </form>
+        </center>
+    </div>
+{% if artist %}
+    <div class='span-24 last'>
+        <div class='span-6'>
+            <img style='float: right' src='{{artist.image}}' /></p>
+        </div>
+        <div class='span-18 last'>
+            <h3><a href='{{artist.url}}'>{{artist.name|escape}}</a></h3>
+  
+            <p><strong>{{artist.stats.playcount}}</strong> plays by <strong>{{artist.stats.listeners}}</strong> listeners</p>
+            
+            <p>{{artist.bio.content}}
+            <br />
+            <em>Published: {{artist.bio.published}}</em></p>
+            
+            <p><strong>Similar to</strong>
+            <em>
+            {% for similar in artist.similar.artist %}
+                <a href='{{similar.url}}'>{{similar.name}}</a>
+            {% endfor %}
+            </em>
+            </p>
+            
+            <p><strong>Tags:</strong>
+            {% for tag in artist.tags.tag %}
+                <a href='{{tag.url}}'>{{tag.name}}</a>
+            {% endfor %}
+            </p>
+            
+        </div>
+    </div>
+{% else %}
+    {% if error %}
+        <div class='span-8'>
+        &nbsp;
+        </div>
+        <div class='span-8'>
+            <div class='ui-state-error'>
+                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+				<strong>Error:</strong> {{ message }}</p>
+            </div>
+        </div>
+        <div class='span-8 last'>
+        &nbsp;
+        </div>
+    {% endif %}
+{% endif %}
+</div>
+
+</body>
+
+</html>
