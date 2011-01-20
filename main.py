@@ -15,8 +15,6 @@
 # limitations under the License.
 #
 import cgi
-import logging
-import simplejson as json
 import os
 from google.appengine.api import users
 from google.appengine.ext import webapp
